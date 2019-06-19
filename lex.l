@@ -7,7 +7,7 @@
 %}
 
 %option 
-
+digit			[0-9]
 number			[0-9]+
 letter			[a-zA-Z]
 /*decimal			-?{digit}+(\.{digit}+)?*/
@@ -64,7 +64,7 @@ space			{void}+
 "var"			{return T_CHAR;}
 "fix"			{return CONSTANT;}
 
-'{letter}'		{yylval.character = yytext[1];
+'{letter}|{digit}'	{yylval.character = yytext[1];
 			return CHAR;
 			}
 

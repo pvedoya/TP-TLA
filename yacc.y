@@ -47,107 +47,107 @@ void yyerror(char * s);
 
 %%
 
-program		:	sentence													{;}
+program		:	sentence														{;}
 	 	;
-sentence	:	sentence function												{;}
-	 	|	main														{;}
+sentence	:	sentence function													{;}
+	 	|	main															{;}
 		;
 main		:	T_INT MAIN OPEN_PARENTHESES CLOSE_PARENTHESES OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES 			{;}
       		;
-function	:	type ID OPEN_PARENTHESES arguments CLOSE_PARENTHESES OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES	{;}
+function	:	type ID OPEN_PARENTHESES arguments CLOSE_PARENTHESES OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES		{;}
 	 	;
-type		:	T_INT														{;}
-      		|	T_STRING													{;}
-		|	T_CHAR														{;}
+type		:	T_INT															{;}
+      		|	T_STRING														{;}
+		|	T_CHAR															{;}
 		;
-arguments	:															{;}
-	  	|	arg														{;}
+arguments	:																{;}
+	  	|	arg															{;}
 		;
-arg		:	var COMMA arg													{;}
-     		|	var														{;}
-		;
-var		:	type ID														{;}
+arg		:	var COMMA arg														{;}
+     		|	var															{;}
+		;	
+var		:	type ID															{;}
      		;
-code		:															{;}
-      		|	lines														{;}
+code		:																{;}
+      		|	lines															{;}
 		;
-lines		:	line lines													{;}
-       		|	line														{;}
+lines		:	line lines														{;}
+       		|	line															{;}
 		;
-line		:	declare DOT													{;}
-       		|	assign DOT													{;}
-		|	call_function DOT												{;}
-		|	return DOT													{;}
-		|	when														{;}
-		|	repeat														{;}
+line		:	declare DOT														{;}
+       		|	assign DOT														{;}
+		|	call_function DOT													{;}
+		|	return DOT														{;}
+		|	when															{;}
+		|	repeat															{;}
 		;
-declare		:	T_INT ID ASSIGN value												{;}
-	 	|	type ID ASSIGN ID												{;}
-	 	|	T_STRING ID ASSIGN STRING											{;}
-		|	T_STRING ID ASSIGN call_function										{;}
-		|	T_STRING ID ASSIGN ID												{;}
-		|	T_CHAR ID ASSIGN CHAR												{;}	
-		|	T_CHAR ID ASSIGN call_function    										{;}
-		|	T_CHAR ID ASSIGN ID												{;}
+declare		:	T_INT ID ASSIGN value													{;}
+	 	|	type ID ASSIGN ID													{;}
+	 	|	T_STRING ID ASSIGN STRING												{;}
+		|	T_STRING ID ASSIGN call_function											{;}
+		|	T_STRING ID ASSIGN ID													{;}
+		|	T_CHAR ID ASSIGN CHAR													{;}	
+		|	T_CHAR ID ASSIGN call_function    											{;}
+		|	T_CHAR ID ASSIGN ID													{;}
+		;	
+assign		:	ID assval value														{;}
+		|	ID assval STRING													{;}
+		|	ID assval CHAR														{;}
 		;
-assign		:	ID assval value													{;}
-		|	ID assval STRING												{;}
-		|	ID assval CHAR													{;}
+assval		:	ASSIGN															{;}
+		|	SUM_ASSIGN														{;}
+		|	SUB_ASSIGN														{;}
+		|	MUL_ASSIGN														{;}
+		|	DIV_ASSIGN														{;}
+		|	OP_ASSIGN														{;}
+		|	MOD_ASSIGN														{;}
 		;
-assval		:	ASSIGN														{;}
-		|	SUM_ASSIGN													{;}
-		|	SUB_ASSIGN													{;}
-		|	MUL_ASSIGN													{;}
-		|	DIV_ASSIGN													{;}
-		|	OP_ASSIGN													{;}
-		|	MOD_ASSIGN													{;}
-		;
-value		:	ID														{;}
-       		|	INT														{;}
-		|	call_function													{;}
-		|	value PLUS value												{;}
-		|	value MINUS value												{;}
-		|	value MULT value												{;}
-		|	value DIV value													{;}
-		|	value MOD value													{;}
+value		:	ID															{;}
+       		|	INT															{;}
+		|	call_function														{;}
+		|	value PLUS value													{;}
+		|	value MINUS value													{;}
+		|	value MULT value													{;}
+		|	value DIV value														{;}
+		|	value MOD value														{;}
 		;	//TODO: ver si falta alguna			
-call_function	:	ID OPEN_PARENTHESES call_arguments CLOSE_PARENTHESES								{;} 
-		|	ID OPEN_PARENTHESES CLOSE_PARENTHESES								{;}
-		|	PRINTF OPEN_PARENTHESES call_arguments CLOSE_PARENTHESES							{;}
+call_function	:	ID OPEN_PARENTHESES call_arguments CLOSE_PARENTHESES									{;} 
+		|	ID OPEN_PARENTHESES CLOSE_PARENTHESES											{;}	
+		|	PRINTF OPEN_PARENTHESES call_arguments CLOSE_PARENTHESES								{;}
 		;
-call_arguments	:	expression													{;}
-	       	|	expression COMMA call_arguments											{;}
+call_arguments	:	expression														{;}
+	       	|	expression COMMA call_arguments												{;}
+		;	
+return		:	RETURN value														{;}
+		|	RETURN STRING														{;}
+		|	RETURN CHAR														{;}
 		;
-return		:	RETURN value													{;}
-		|	RETURN STRING													{;}
-		|	RETURN CHAR													{;}
-		;
-when		:	WHEN OPEN_PARENTHESES condition CLOSE_PARENTHESES DO OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES else	{;}
+when		:	WHEN OPEN_PARENTHESES condition CLOSE_PARENTHESES DO OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES else		{;}
       		;
-else     	:	ELSE DO OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES							{;}
+else     	:	ELSE DO OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES								{;}
 		|	ELSE WHEN OPEN_PARENTHESES condition CLOSE_PARENTHESES DO OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES else	{;}
-		|															{;}
+		|																{;}
 		;
-repeat		:	REPEAT OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES WHEN OPEN_PARENTHESES condition CLOSE_PARENTHESES DOT{;}
-		|	WHEN OPEN_PARENTHESES condition CLOSE_PARENTHESES REPEAT OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES	{;}
+repeat		:	REPEAT OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES WHEN OPEN_PARENTHESES condition CLOSE_PARENTHESES DOT	{;}
+		|	WHEN OPEN_PARENTHESES condition CLOSE_PARENTHESES REPEAT OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES		{;}
 		;
-condition	:	expression													{;}
-	  	|	OPEN_PARENTHESES condition AND condition CLOSE_PARENTHESES							{;}
-		|	OPEN_PARENTHESES condition OR condition	CLOSE_PARENTHESES							{;}
-		|	NOT condition													{;}
+condition	:	expression														{;}
+	  	|	OPEN_PARENTHESES condition AND condition CLOSE_PARENTHESES								{;}
+		|	OPEN_PARENTHESES condition OR condition	CLOSE_PARENTHESES								{;}
+		|	NOT condition														{;}
 		;
-expression	:	call_function													{;}
-	   	|	INT														{;}
-		|	STRING														{;}
-		|	ID														{;}
-		|	value compare value												{;}
-		;
-compare		:	EQUAL														{;}
-	 	|	NOT_EQUAL													{;}
-		|	LEQ_THAN													{;}
-		|	GEQ_THAN													{;}	
-		|	LESS_THAN													{;}
-		|	GREATER_THAN													{;}
+expression	:	call_function														{;}
+	   	|	INT															{;}
+		|	STRING															{;}
+		|	ID															{;}
+		|	value compare value													{;}
+		;	
+compare		:	EQUAL															{;}
+	 	|	NOT_EQUAL														{;}
+		|	LEQ_THAN														{;}
+		|	GEQ_THAN														{;}	
+		|	LESS_THAN														{;}
+		|	GREATER_THAN														{;}
 		;	
 
 

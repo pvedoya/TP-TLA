@@ -8,8 +8,9 @@
 
 %option noyywrap
 
-digit			[0-9]
-number			-?{digit}+(\.{digit}+)?
+digit			[0-9]+
+letter			[a-zA-Z]
+//number			-?{digit}+(\.{digit}+)?
 word			[a-zA-Z][a-zA-Z0-9_]*
 void			[ \t\n]
 space			{void}+
@@ -19,7 +20,6 @@ space			{void}+
 --.*--			;/* comments are ignored */
 {space}			;/* does nothing */
 "main"			{return MAIN;}
-"if"			{return IF;}
 "else"			{return ELSE;}
 "return"		{return RETURN;}
 "when"			{return WHEN;}
@@ -29,7 +29,7 @@ space			{void}+
 "."			{return DOT;}
 "end"			{return END;}
 "printf"		{return PRINTF;}
-"="			{return EQUALS;}
+"="			{return ASSIGN;}
 "+="			{return SUM_ASSIGN;}
 "-="			{return SUB_ASSIGN;}
 "*="			{return MUL_ASSIGN;}
@@ -38,7 +38,7 @@ space			{void}+
 "%="			{return MOD_ASSIGN;}
 "<="			{return LEQ_THAN;}
 ">="			{return GEQ_THAN;}
-"=="			{return EQUAL_THAN;}
+"=="			{return EQUAL;}
 "<>"			{return NOT_EQUAL;}
 "<"			{return LESS_THAN;}
 ">"			{return GREATER_THAN;}
@@ -60,12 +60,11 @@ space			{void}+
 "["			{return OPEN_BRACKETS;}
 "]"			{return CLOSE_BRACKETS;}
 "num"			{return T_INT;}
-"str"			{return T_STRING;}
-"dec"			{return T_DOUBLE;}
+"str"			{return T_STRING;} 
 "var"			{return T_CHAR;}
 "fix"			{return CONSTANT;}
 
-{number}		{strcpy(yyval.string,yytext);
+{number}		{yylval.integer = strtol(yytext, NULL, 10);
 			return NUM;
 			}
 
@@ -73,6 +72,11 @@ space			{void}+
 			strcpy(text,yytext);
 			yyval.string = text;
 			return ID;
+			}
+
+{letter}		{char letter =  yytext;
+			yyval.character = letter;
+			return CHAR;
 			}
 
 \".*\"			{char *text = malloc(strlen(yytext)+1);

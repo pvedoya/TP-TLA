@@ -52,7 +52,7 @@ program		:	sentence													{;}
 sentence	:	sentence function												{;}
 	 	|	main														{;}
 		;
-main		:	MAIN OPEN_PARENTHESES CLOSE_PARENTHESES OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES 			{;}
+main		:	T_INT MAIN OPEN_PARENTHESES CLOSE_PARENTHESES OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES 			{;}
       		;
 function	:	type ID OPEN_PARENTHESES arguments CLOSE_PARENTHESES OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES	{;}
 	 	;
@@ -81,12 +81,14 @@ line		:	declare DOT													{;}
 		|	when														{;}
 		|	repeat														{;}
 		;
-declare		:	NUM ID EQUAL value												{;}
-	 	|	type ID EQUAL ID												{;}
-	 	|	T_STRING ID EQUAL STRING											{;}
-		|	T_STRING ID EQUAL call_function											{;}
-		|	T_CHAR ID EQUAL CHAR												{;}	
-		|	T_CHAR ID EQUAL call_function    										{;}
+declare		:	T_INT ID ASSIGN value												{;}
+	 	|	type ID ASSIGN ID												{;}
+	 	|	T_STRING ID ASSIGN STRING											{;}
+		|	T_STRING ID ASSIGN call_function										{;}
+		|	T_STRING ID ASSIGN ID												{;}
+		|	T_CHAR ID ASSIGN CHAR												{;}	
+		|	T_CHAR ID ASSIGN call_function    										{;}
+		|	T_CHAR ID ASSIGN ID												{;}
 		;
 assign		:	ID assval value													{;}
 		|	ID assval STRING												{;}
@@ -101,7 +103,7 @@ assval		:	ASSIGN														{;}
 		|	MOD_ASSIGN													{;}
 		;
 value		:	ID														{;}
-       		|	NUM														{;}
+       		|	INT														{;}
 		|	call_function													{;}
 		|	value PLUS value												{;}
 		|	value MINUS value												{;}
@@ -109,8 +111,12 @@ value		:	ID														{;}
 		|	value DIV value													{;}
 		|	value MOD value													{;}
 		;	//TODO: ver si falta alguna			
-call_function	:	ID OPEN_PARENTHESES arguments CLOSE_PARENTHES									{;} 
-		|	PRINTF OPEN_PARENTHESES arguments CLOSE_PARENTHESES								{;}
+call_function	:	ID OPEN_PARENTHESES call_arguments CLOSE_PARENTHESES								{;} 
+		|	ID OPEN_PARENTHESES CLOSE_PARENTHESES								{;}
+		|	PRINTF OPEN_PARENTHESES call_arguments CLOSE_PARENTHESES							{;}
+		;
+call_arguments	:	expression													{;}
+	       	|	expression COMMA call_arguments											{;}
 		;
 return		:	RETURN value													{;}
 		|	RETURN STRING													{;}
@@ -118,20 +124,22 @@ return		:	RETURN value													{;}
 		;
 when		:	WHEN OPEN_PARENTHESES condition CLOSE_PARENTHESES DO OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES else	{;}
       		;
-else     	:	ELSE OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES							{;}
-		|	ELSE WHEN OPEN PARENTHESES condition CLOSE_PARENTHESES OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES else	{;}
+else     	:	ELSE DO OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES							{;}
+		|	ELSE WHEN OPEN_PARENTHESES condition CLOSE_PARENTHESES DO OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES else	{;}
 		|															{;}
 		;
-repeat		:	REPEAT OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES WHEN OPEN_PARENTHESES condition CLOSE_PARENTHESES	{;}
+repeat		:	REPEAT OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES WHEN OPEN_PARENTHESES condition CLOSE_PARENTHESES DOT{;}
 		|	WHEN OPEN_PARENTHESES condition CLOSE_PARENTHESES REPEAT OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES	{;}
 		;
 condition	:	expression													{;}
-	  	|	condition AND condition												{;}
-		|	condition OR condition												{;}
+	  	|	OPEN_PARENTHESES condition AND condition CLOSE_PARENTHESES							{;}
+		|	OPEN_PARENTHESES condition OR condition	CLOSE_PARENTHESES							{;}
 		|	NOT condition													{;}
 		;
 expression	:	call_function													{;}
-	   	|	ID														{;}
+	   	|	INT														{;}
+		|	STRING														{;}
+		|	ID														{;}
 		|	value compare value												{;}
 		;
 compare		:	EQUAL														{;}

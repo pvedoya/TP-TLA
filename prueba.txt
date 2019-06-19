@@ -1,0 +1,31 @@
+num main(){
+	hola(unoui,dos).
+	adios("23").
+	return 1.
+}
+
+str adios(){
+	str hos = "gaoas".
+	num nsd = 45.
+	var dasd = 'f'.
+}
+
+
+
+num hola(num uno, str dos){
+	when(( dasd == dasd | !(tres <> 3 & "fsdf"))) do {
+		str hoals = fas.
+	}	
+	
+	repeat{printf("hola").} when ((uno == dos | tres)).
+
+	when (uno <= dos) 
+	do{	
+		num dos = 4.
+	}else when(dos <> res)
+	do {
+		str hola = "sda".
+	}
+	else
+	do{}
+}

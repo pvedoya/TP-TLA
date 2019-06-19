@@ -64,10 +64,10 @@ space			{void}+
 "var"			{return T_CHAR;}
 "fix"			{return CONSTANT;}
 
-'{letter}'		{yylval.character = yytext[1];
-			return CHAR;
-			}
-
+{letter}                {char letter =  yytext[0];
+                        yylval.character = letter;
+                        return CHAR;
+                        }
 
 {number}		{yylval.integer = strtol(yytext, NULL, 10);
 			return INT;
@@ -81,7 +81,7 @@ space			{void}+
 
 \".*\"			{char *text = malloc(strlen(yytext)+1);
 			strcpy(text, yytext);
-			yylval.string = text;
+			yyval.string = text;
 			return STRING;
 			}
 

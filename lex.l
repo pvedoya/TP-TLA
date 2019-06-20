@@ -4,6 +4,9 @@
 	#include "y.tab.h"
 	void yyerror(char * s);
 	int yylex();
+	
+
+//"for"                   {return FOR;} FALTA VER DE AGREGAR ESTO
 %}
 
 %option 
@@ -23,12 +26,11 @@ space			{void}+
 "else"			{return ELSE;}
 "return"		{return RETURN;}
 "when"			{return WHEN;}
-"do"			{return DO;}
+"during"		{return DURING;}
 "repeat"		{return REPEAT;}
-"for"			{return FOR;}
 "."			{return DOT;}
-"end"			{return END;}
 "printf"		{return PRINTF;}
+"read"			{return READ;}
 "="			{return ASSIGN;}
 "+="			{return SUM_ASSIGN;}
 "-="			{return SUB_ASSIGN;}
@@ -62,9 +64,9 @@ space			{void}+
 "num"			{return T_INT;}
 "str"			{return T_STRING;} 
 "var"			{return T_CHAR;}
-"fix"			{return CONSTANT;}
+"end"			{return END;}
 
-'{letter}|{digit}'	{yylval.character = yytext[1];
+'({letter}|{digit})'		{yylval.character = yytext[1];
 			return CHAR;
 			}
 

@@ -7,25 +7,27 @@ num main(){
 str adios(){
 	str hos = "gaoas".
 	num nsd = 45.
-	var dasd = 'f'.
+	var kea = '6'.
 }
 
 
 
 num hola(num uno, str dos){
-	when(( dasd == dasd | !(tres <> 3 & "fsdf"))) do {
-		str hoals = fas.
-	}	
-	
-	repeat{printf("hola").} when ((uno == dos | tres)).
 
-	when (uno <= dos) 
-	do{	
-		num dos = 4.
-	}else when(dos <> res)
-	do {
-		str hola = "sda".
-	}
-	else
-	do{}
+	during(( dasd == dasd | !(tres <> 3 & "fsdf"))) {
+                str hoals = fas.
+        }
+	repeat{printf("hola").} during ((uno == dos | tres)).
+
+        when (uno <= dos)
+        {
+                num dos = 4.
+        }else when(dos <> res)
+         {
+                str hola = "sda".
+        }
+        else
+        {}
+
+
 }

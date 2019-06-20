@@ -53,11 +53,11 @@ extern int yydebug;
     ELSE = 263,
     RETURN = 264,
     WHEN = 265,
-    DO = 266,
+    DURING = 266,
     REPEAT = 267,
-    FOR = 268,
-    END = 269,
-    PRINTF = 270,
+    END = 268,
+    PRINTF = 269,
+    READ = 270,
     DOT = 271,
     COLON = 272,
     SEMICOLON = 273,
@@ -66,36 +66,35 @@ extern int yydebug;
     T_STRING = 276,
     T_CHAR = 277,
     T_DOUBLE = 278,
-    CONSTANT = 279,
-    OPEN_CURLY_PARENTHESES = 280,
-    CLOSE_CURLY_PARENTHESES = 281,
-    OPEN_PARENTHESES = 282,
-    CLOSE_PARENTHESES = 283,
-    OPEN_BRACKETS = 284,
-    CLOSE_BRACKETS = 285,
-    ASSIGN = 286,
-    SUM_ASSIGN = 287,
-    SUB_ASSIGN = 288,
-    MUL_ASSIGN = 289,
-    DIV_ASSIGN = 290,
-    OP_ASSIGN = 291,
-    MOD_ASSIGN = 292,
-    LEQ_THAN = 293,
-    GEQ_THAN = 294,
-    EQUAL = 295,
-    NOT_EQUAL = 296,
-    LESS_THAN = 297,
-    GREATER_THAN = 298,
-    AND = 299,
-    OR = 300,
-    NOT = 301,
-    SUM = 302,
-    SUB = 303,
-    MULT = 304,
-    DIV = 305,
-    MOD = 306,
-    PLUS = 307,
-    MINUS = 308
+    OPEN_CURLY_PARENTHESES = 279,
+    CLOSE_CURLY_PARENTHESES = 280,
+    OPEN_PARENTHESES = 281,
+    CLOSE_PARENTHESES = 282,
+    OPEN_BRACKETS = 283,
+    CLOSE_BRACKETS = 284,
+    ASSIGN = 285,
+    SUM_ASSIGN = 286,
+    SUB_ASSIGN = 287,
+    MUL_ASSIGN = 288,
+    DIV_ASSIGN = 289,
+    OP_ASSIGN = 290,
+    MOD_ASSIGN = 291,
+    LEQ_THAN = 292,
+    GEQ_THAN = 293,
+    EQUAL = 294,
+    NOT_EQUAL = 295,
+    LESS_THAN = 296,
+    GREATER_THAN = 297,
+    AND = 298,
+    OR = 299,
+    NOT = 300,
+    SUM = 301,
+    SUB = 302,
+    MULT = 303,
+    DIV = 304,
+    MOD = 305,
+    PLUS = 306,
+    MINUS = 307
   };
 #endif
 /* Tokens.  */
@@ -107,11 +106,11 @@ extern int yydebug;
 #define ELSE 263
 #define RETURN 264
 #define WHEN 265
-#define DO 266
+#define DURING 266
 #define REPEAT 267
-#define FOR 268
-#define END 269
-#define PRINTF 270
+#define END 268
+#define PRINTF 269
+#define READ 270
 #define DOT 271
 #define COLON 272
 #define SEMICOLON 273
@@ -120,36 +119,35 @@ extern int yydebug;
 #define T_STRING 276
 #define T_CHAR 277
 #define T_DOUBLE 278
-#define CONSTANT 279
-#define OPEN_CURLY_PARENTHESES 280
-#define CLOSE_CURLY_PARENTHESES 281
-#define OPEN_PARENTHESES 282
-#define CLOSE_PARENTHESES 283
-#define OPEN_BRACKETS 284
-#define CLOSE_BRACKETS 285
-#define ASSIGN 286
-#define SUM_ASSIGN 287
-#define SUB_ASSIGN 288
-#define MUL_ASSIGN 289
-#define DIV_ASSIGN 290
-#define OP_ASSIGN 291
-#define MOD_ASSIGN 292
-#define LEQ_THAN 293
-#define GEQ_THAN 294
-#define EQUAL 295
-#define NOT_EQUAL 296
-#define LESS_THAN 297
-#define GREATER_THAN 298
-#define AND 299
-#define OR 300
-#define NOT 301
-#define SUM 302
-#define SUB 303
-#define MULT 304
-#define DIV 305
-#define MOD 306
-#define PLUS 307
-#define MINUS 308
+#define OPEN_CURLY_PARENTHESES 279
+#define CLOSE_CURLY_PARENTHESES 280
+#define OPEN_PARENTHESES 281
+#define CLOSE_PARENTHESES 282
+#define OPEN_BRACKETS 283
+#define CLOSE_BRACKETS 284
+#define ASSIGN 285
+#define SUM_ASSIGN 286
+#define SUB_ASSIGN 287
+#define MUL_ASSIGN 288
+#define DIV_ASSIGN 289
+#define OP_ASSIGN 290
+#define MOD_ASSIGN 291
+#define LEQ_THAN 292
+#define GEQ_THAN 293
+#define EQUAL 294
+#define NOT_EQUAL 295
+#define LESS_THAN 296
+#define GREATER_THAN 297
+#define AND 298
+#define OR 299
+#define NOT 300
+#define SUM 301
+#define SUB 302
+#define MULT 303
+#define DIV 304
+#define MOD 305
+#define PLUS 306
+#define MINUS 307
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -163,7 +161,7 @@ union YYSTYPE
 	char * string;
 	char character;
 
-#line 167 "y.tab.h" /* yacc.c:1909  */
+#line 165 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

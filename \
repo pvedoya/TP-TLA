@@ -1,92 +1,434 @@
 %{
 	#include <stdio.h>
 	#include <stdlib.h>
-	#include "y.tab.h"
-	void yyerror(char * s);
-	int yylex();
+	#include <ctype.h>
+	#include "node.h"
+
+extern int yylex();
+void yyerror(char * s);
 %}
 
-%option 
+%start program
 
-number			[0-9]+
-letter			[a-zA-Z]
-/*decimal			-?{digit}+(\.{digit}+)?*/
-word			[a-zA-Z][a-zA-Z0-9_]*
-void			[ \t\n]
-space			{void}+
+/*Represents how to access data*/
+%union {
+	struct Node * node;
+	int integer;
+	char * string;
+	char character;
+}
+
+/*Definition of tokens, they use the token names defined in the lex.l file*/
+
+%token <integer> INT
+%token <string> ID STRING
+%token <character> CHAR
+
+%token <node> MAIN ELSE RETURN WHEN DURING REPEAT DOT PRINTF READ ASSIGN SUM_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN OP_ASSIGN MOD_ASSIGN
+		LEQ_THAN GEQ_THAN EQUAL NOT_EQUAL LESS_THAN GREATER_THAN AND OR NOT SUM SUB MULT DIV MOD COLON SEMICOLON COMMA 
+		OPEN_CURLY_PARENTHESES CLOSE_CURLY_PARENTHESES OPEN_PARENTHESES CLOSE_PARENTHESES OPEN_BRACKETS CLOSE_BRACKETS CONSTANT
+		T_CHAR T_INT T_STRING END
+
+%type <node> program sentence main function type arguments arg var code lines line declare assign assval value call_function call_arguments return when else during condition expression compare
+
+/*Precedence of actions, the least important come first.*/
+
+%left PLUS MINUS
+%left MULT DIV MOD
+%left GREATER_THAN LESS_THAN GEQ_THAN LEQ_THAN
+%left AND OR EQUAL NOT_EQUAL
+
+%%
+
+program		:	sentence														{	$$ = $1;
+																		 	printProgram($$);
+																		}
+	 	;
+sentence	:	sentence function													{	$$ = newNode("sentence");
+	 																		addNode($$, $1);
+																			addNode($$ ,$2);
+																		}
+	 	|	main															{	$$ = newNode("sentence");
+																			addNode($$, $1);
+																		}
+		;
+main		:	T_INT MAIN OPEN_PARENTHESES CLOSE_PARENTHESES OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES 			{	$$ = newNode("main");
+      																			append($$, newNodeWithType(NULL, tintN));
+      																			append($$, newNodeWithType(NULL,mainN));
+																			append($$, newNodeWithType(NULL, opParenthesesN));
+      																			append($$, newNodeWithType(NULL, clParenthesesN));
+																			append($$, newNodeWithType(NULL, opCurltN));
+																			append($$, $5);
+																			append($$, newNodeWithType(NULL, clCurlyN));
+																		}
+      		;
+function	:	type ID OPEN_PARENTHESES arguments CLOSE_PARENTHESES OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES		{	$$ = newNode("function");
+																			append($$, $1);
+																			append($$, newNodeWithType($2, idN));
+																			append($$, newNodeWithType(NULL, opParenthesesN));
+																			append($$, $4);
+																			append($$, newNodeWithType(NULL, clParenthesesN));
+																			append($$, newNodeWithType(NULL, opCurlyN));
+																			append($$, $7);
+																			append($$, newNodeWithType(NULL, clCurlyN));
+																		}
+	 	;
+type		:	T_INT															{	$$ = newNodeWithType(NULL, tintN);
+																		}
+      		|	T_STRING														{	$$ = newNodeWithType(NULL,tstringN);
+																		}
+		|	T_CHAR															{	$$ = newNodeWithType(NULL, tcharN);
+																		}
+		;
+arguments	:																{	$$ = NULL;
+	  																	}
+	  	|	arg															{	$$ = newNode("args");
+																			append($$, $1);
+																		}
+		;
+arg		:	var COMMA arg														{	$$ = newNode("arg");
+     																			append($$, $1);
+     																			append($$, newNodeWithType(NULL, commaN));
+																			apend($$, $3);
+     																		}
+     		|	var															{	$$ = newNode("arg");
+																			append($$, $1);
+																		}
+		;	
+var		:	type ID															{	$$ = newNode("var");
+     																			append($$, $1);
+																			append($$, newNodeWithType($2, idN));
+																		}
+     		;
+code		:																{	$$ = NULL;
+      																		}
+      		|	lines															{	$$ = newNode("code");
+																			append($$, $1);	
+																		}
+		;
+lines		:	line lines														{	$$ = newNode("lines");
+       																			append($$, $2);
+																			append($$, $1);
+																		}
+       		|	line															{	$$ = newNode("lines");
+																			append($$, $1);	
+																		}
+		;
+line		:	declare DOT														{	$$ = newNode("line");
+      																			append($$, $1);
+																			append($$, newNodeWithType(NULL, dotN));
+																		}
+       		|	assign DOT														{	$$ = newNode("line");
+																			append($$, $1);
+																			append($$, newNodeWithType(NULL, dotN));
+																		}
+		|	call_function DOT													{	$$ = newNode("line");
+																			append($$, $1);	
+																			append($$, newNodeWithType(NULL, dotN));
+																		}
+		|	return DOT														{	$$ = newNode("line");
+																			append($$, $1);
+																			append($$, newNodeWithType(NULL, dotN));
+																		}
+		|	END DOT															{	$$ = newNode("line");
+																			append($$, newNodeWithType(NULL, endN));
+																			append($$, newNodeWithType(NULL, dotN));
+																		}
+		|	when															{	$$ = newNode("line");
+																			append($$, $1);
+																		}
+		|	during															{	$$ = newNode("line");
+																			append($$, $1);
+																		}
+		;
+declare		:	T_INT ID ASSIGN value													{	$$ = newNode("declare");
+																			append($$, newNodeWithType(NULL, tintN));
+																			append($$, newNodeWithType($2, idN));
+																			append($$, newNodeWithType(NULL, assignN));
+																			append($$, $4);
+																		}
+	 	|	type ID ASSIGN ID													{	$$ = newNode("declare");
+																			append($$, $1);
+																			append($$, newNodeWithType($2, idN));
+																			append($$, newNodeWithType(NULL, assignN));
+																			append($$, newNodeWithType($4, idN));
+																		}
+	 	|	T_STRING ID ASSIGN STRING												{	$$ = newNode("declare");
+																			append($$, newNodeWithType(NULL, tstringN));
+																			append($$, newNodeWithType($2, idN));
+																			append($$, newNodeWithType(NULL, assignN));
+																			append($$, newNodeWithType($4, stringN));
+																		}
+		|	T_STRING ID ASSIGN call_function											{	$$ = newNode("declare");
+																			append($$, newNodeWithType(NULL, tstringN));
+																			append($$, newNodeWithType($2, idN));
+																			append($$, newNodeWithType(NULL, assignN));
+																			append($$, $4);
+																		}
+		|	T_STRING ID ASSIGN ID													{	$$ = newNode("declare");
+																			append($$, newNodeWithType(NULL, tstringN));
+																			append($$, newNodeWithType($2, idN));
+                                                                                                                                                        append($$, newNodeWithType(NULL, assignN));
+                                                                                                                                                        append($$, newNodeWithType($4, stringN));
+																		}
+		|	T_CHAR ID ASSIGN CHAR													{	$$ = newNode("declare");
+																			append($$, newNodeWithType(NULL, tcharN));
+																			append($$, newNodeWithType($2, idN));
+                                                                                                                                                        append($$, newNodeWithType(NULL, assignN));
+                                                                                                                                                        append($$, newNodeWithType($4, charN));
+																		}	
+		|	T_CHAR ID ASSIGN call_function    											{	$$ = newNode("declare");
+																			append($$, newNodeWithType(NULL, tcharN));
+																			append($$, newNodeWithType($2,idN));
+                                                                                                                                                        append($$, newNodeWithType(NULL, assignN));
+                                                                                                                                                        append($$, $4);
+																		}
+		|	T_CHAR ID ASSIGN ID													{	$$ = newNode("declare");
+																			append($$, newNodeWithType(NULL, tcharN));
+																			append($$, newNodeWithType($2,idN));
+                                                                                                                                                        append($$, newNodeWithType(NULL, assignN));
+                                                                                                                                                        append($$, newNodeWithType($4, stringN));
+																		}
+		;	
+assign		:	ID assval value														{	$$ = newNode("assign");
+																			append($$, newNodeWithValue($1, idN));
+																			append($$, $2);
+																			append($$, $3);
+																		}
+		|	ID assval STRING													{	$$ = newNode("assign");
+																			append($$, newNodeWithValue($1, idN));
+                                                                                                                                                        append($$, $2);
+                                                                                                                                                        append($$, newNodeWithValue($3, stringN));
+																		}
+		|	ID assval CHAR														{	$$ = newTree();
+																			append($$, newNodeWithValue($1, idN));
+                                                                                                                                                        append($$, $2);
+                                                                                                                                                        append($$, newNodeWithValue($3, charN));
+																		}
+		;
+assval		:	ASSIGN															{	$$ = newNodeWithValue(NULL, assignN);
+																		}
+		|	SUM_ASSIGN														{	$$ = newNodeWithValue(NULL, sumAssignN);
+																		}
+		|	SUB_ASSIGN														{	$$ = newNodeWithValue(NULL, subAssignN);
+																		}
+		|	MUL_ASSIGN														{	$$ = newNodeWithValue(NULL, mulAssignN);
+																		}
+		|	DIV_ASSIGN														{	$$ = newNodeWithValue(NULL, divAssignN);
+																		}
+		|	OP_ASSIGN														{	$$ = newNodeWithValue(NULL, opAssignN);
+																		}
+		|	MOD_ASSIGN														{	$$ = newNodeWithValue(NULL, modAssignN);
+																		}
+		;
+value		:	ID															{	$$ = newNodeWithValue($1, idN);
+       																		}
+       		|	INT															{	$$ = newNodeWithValue($1, intN);
+																		}
+		|	call_function														{	$$ = newNode("value");
+																			append($$, $1);
+																		}
+		|	value PLUS value													{	$$ = newNode("value");
+																			append($$, $1);
+																			append($$, newNodeWithValue(NULL, sumN););
+																			append($$, $3);
+																		}
+		|	value MINUS value													{	$$ = newTree();
+                                                                                                                                                        addNode($$, $1);
+																			addTerminalNode($$, subN);
+                                                                                                                                                        addNode($$, $3);
+
+																		}
+		|	value MULT value													{	$$ = newTree();
+                                                                                                                                                        addNode($$, $1);
+                                                                                                                                                        addTerminalNode($$, multN);
+                                                                                                                                                        addNode($$, $3);
+
+																		}
+		|	value DIV value														{	$$ = newTree();
+                                                                                                                                                        addNode($$, $1);
+                                                                                                                                                        addTerminalNode($$, divN);
+                                                                                                                                                        addNode($$, $3);
+
+																		}
+		|	value MOD value														{	$$ = newTree();
+                                                                                                                                                        addNode($$, $1);
+                                                                                                                                                        addTerminalNode($$, modN);
+                                                                                                                                                        addNode($$, $3);
+
+																		}
+		;	//TODO: ver si falta alguna			
+call_function	:	ID OPEN_PARENTHESES call_arguments CLOSE_PARENTHESES									{	$$ = newTree();
+	      																		addTerminalNodeWithValue($$, idN, $1);
+																			addTerminalNode($$, opParenthesesN);
+																			addNode($$, $3);
+																			addTerminalNode($$, clParenthesesN);
+	      																	} 
+		|	ID OPEN_PARENTHESES CLOSE_PARENTHESES											{	$$ = newTree();
+                                                                                                                                                        addTerminalNodeWithValue($$, idN, $1);
+                                                                                                                                                        addTerminalNode($$, opParenthesesN);
+                                                                                                                                                        addTerminalNode($$, clParenthesesN);
+
+																		}	
+		|	PRINTF OPEN_PARENTHESES call_arguments CLOSE_PARENTHESES								{	$$ = newTree();
+                                                                                                                                                        addTerminalNode($$, printfN);
+                                                                                                                                                        addTerminalNode($$, opParenthesesN);
+                                                                                                                                                        addNode($$, $3);
+                                                                                                                                                        addTerminalNode($$, clParenthesesN);
+
+																		}
+		|	READ OPEN_PARENTHESES CLOSE_PARENTHESES											{	$$ = newTree();
+                                                                                                                                                        addTerminalNode($$, readN);
+                                                                                                                                                        addTerminalNode($$, opParenthesesN);
+                                                                                                                                                        addTerminalNode($$, clParenthesesN);
+																		}
+		;
+call_arguments	:	expression														{	$$ = newTree();
+	       																		addNode($$, $1);
+																		}
+	       	|	expression COMMA call_arguments												{	$$ = newTree();
+																			addNode($$, $1);
+																			addTerminalNode($$, commaN);
+																			addNode($$, $3);
+																		}
+		;	
+return		:	RETURN value														{	$$ = newTree();
+																			addTerminalNode($$, returnN);
+																			addNode($$, $2);
+																		}
+		|	RETURN STRING														{	$$ = newTree();
+																			addTerminalNode($$, returnN);
+																			addTerminalNodeWithValue($$, stringN, $2);
+																		}
+		|	RETURN CHAR														{	$$ = newTree();
+																			addTerminalNode($$, returnN);
+																			addTerminalNodeWithValue($$, charN, $2);
+																		}
+		;
+when		:	WHEN OPEN_PARENTHESES condition CLOSE_PARENTHESES OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES else		{	$$ = newTree();
+      																			addTerminalNode($$, whenN);
+																			addTerminalNode($$, opParenthesesN);
+																			addNode($$, $3);
+																			addTerminalNode($$, clParenthesesN);
+																			addTerminalNode($$, opCurlyN);
+																			addNode($$, $6);
+																			addTerminalNode($$, clCurlyN);
+																			addNode($$, $8);
+																		}
+      		;
+else     	:	ELSE OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES								{	$$ = newTree();
+	  																		addTerminalNode($$, elseN);
+																			addTerminalNode($$, opCurlyN);
+																			addNode($$, $3);
+																			addTerminalNode($$, clCurlyN);
+	  																	}
+		|	ELSE WHEN OPEN_PARENTHESES condition CLOSE_PARENTHESES OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES else		{	$$ = newTree();
+																			addTerminalNode($$, elseN);
+																			addTerminalNode($$, whenN);
+																			addTerminalNode($$, opParenthesesN);
+																			addNode($$, $4);
+																			addTerminalNode($$, clParenthesesN);
+																			addTerminalNode($$, opCurlyN);
+																			addNode($$, $7);
+																			addTerminalNode($$, clCurlyN);	
+																			addNode($$, $9);																							    }	
+		|																{	$$ = NULL;
+																		}
+		;
+during		:	REPEAT OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES DURING OPEN_PARENTHESES condition CLOSE_PARENTHESES DOT	{	$$ = newTree();
+																			addTerminalNode($$, repeatN);
+																			addTerminalNode($$, opCurlyN);
+																			addNode($$, $3);	
+																			addTerminalNode($$, clCurlyN);
+																			addTerminalNode($$, duringN);
+																			addTerminalNode($$, opParenthesesN);
+																			addNode($$, $7);
+																			addTerminalNode($$, clParenthesesN);
+																			addTerminalNode($$, dotN);
+																		}
+		|	DURING OPEN_PARENTHESES condition CLOSE_PARENTHESES OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES			{	$$ = newTree();
+																			addTerminalNode($$, duringN);
+																			addTerminalNode($$, opParenthesesN);
+																			addNode($$, $3);
+																			addTerminalNode($$, clParenthesesN);
+																			addTerminalNode($$, opCurlyN);
+																			addNode($$, $6);
+																			addTerminalNode($$, clCurlyN);
+																		}
+		;
+condition	:	expression														{	$$ = newTree();
+	  																		addNode($$, $1);
+																		}
+	  	|	OPEN_PARENTHESES condition AND condition CLOSE_PARENTHESES								{	$$ = newTree();
+																			addTerminalNode($$, opParenthesesN);
+																			addNode($$, $2);
+																			addTerminalNode($$, andN);
+																			addNode($$, $4);
+																			addTerminalNode($$, clParenthesesN);
+																		}
+		|	OPEN_PARENTHESES condition OR condition	CLOSE_PARENTHESES								{	$$ = newTree();
+	                                                                                                                                                addTerminalNode($$, opParenthesesN);
+        	                                                                                                                                        addNode($$, $2);
+                	                                                                                                                                addTerminalNode($$, orN);
+                        	                                                                                                                        addNode($$, $4);
+                                	                                                                                                                addTerminalNode($$, clParenthesesN);
+																		}
+		|	NOT condition														{	$$ = newTree();
+																			addTerminalNode($$, notN);
+																			addNode($$, $2);
+																		}
+		;
+expression	:	call_function														{	$$ = newTree();
+	   																		addNode($$, $1);
+																		}
+	   	|	INT															{	$$ = newTree();
+																			addTerminalNodeWithValue($$, intN,$1);
+																		}
+		|	STRING															{ 	$$ = newTree();
+																			addTerminalNodeWithValue($$, stringN, $1);
+																		}
+		|	ID															{	$$ = newTree();
+																			addTerminalNodeWithValue($$, idN, $1);
+																		}
+		|	value compare value													{	$$ = newTree();
+																			addNode($$,$1);
+																			addNode($$,$2);
+																			addNode($$,$3);
+																		}
+		;	
+compare		:	EQUAL															{	$$ = newTree();
+	 																		addTerminalNode($$, equalN);	
+																		}
+	 	|	NOT_EQUAL														{	$$ = newTree();
+																			addTerminalNode($$, notEqualN);
+																		}
+		|	LEQ_THAN														{	$$ = newTree();
+																			addTerminalNode($$, leqN);
+																		}
+		|	GEQ_THAN														{	$$ = newTree();
+																			addTerminalNode($$, geqN);
+																		}	
+		|	LESS_THAN														{	$$ = newTree();
+																			addTerminalNode($$, lessN);
+																		}
+		|	GREATER_THAN														{	$$ = newTree();
+																			addTerminalNode($$, greaterN);
+																		}
+		;	
+
+
+
+
 
 
 %%
---.*--			;/* comments are ignored */
-{space}			;/* does nothing */
-"main"			{return MAIN;}
-"else"			{return ELSE;}
-"return"		{return RETURN;}
-"when"			{return WHEN;}
-"do"			{return DO;}
-"repeat"		{return REPEAT;}
-"for"			{return FOR;}
-"."			{return DOT;}
-"end"			{return END;}
-"printf"		{return PRINTF;}
-"="			{return ASSIGN;}
-"+="			{return SUM_ASSIGN;}
-"-="			{return SUB_ASSIGN;}
-"*="			{return MUL_ASSIGN;}
-"/="			{return DIV_ASSIGN;}
-"!="			{return OP_ASSIGN;}
-"%="			{return MOD_ASSIGN;}
-"<="			{return LEQ_THAN;}
-">="			{return GEQ_THAN;}
-"=="			{return EQUAL;}
-"<>"			{return NOT_EQUAL;}
-"<"			{return LESS_THAN;}
-">"			{return GREATER_THAN;}
-"&"			{return AND;}
-"|"			{return OR;}
-"!"			{return NOT;}
-"+"			{return SUM;}
-"-"			{return SUB;}
-"*"			{return MULT;}
-"/"			{return DIV;}
-"%"			{return MOD;}
-";"			{return COLON;}
-":"			{return SEMICOLON;}
-","			{return COMMA;}
-"{"			{return OPEN_CURLY_PARENTHESES;}
-"}"			{return CLOSE_CURLY_PARENTHESES;}
-"("			{return OPEN_PARENTHESES;}
-")"			{return CLOSE_PARENTHESES;}
-"["			{return OPEN_BRACKETS;}
-"]"			{return CLOSE_BRACKETS;}
-"num"			{return T_INT;}
-"str"			{return T_STRING;} 
-"var"			{return T_CHAR;}
-"fix"			{return CONSTANT;}
 
-{letter}                {char letter =  yytext[0];
-                        yylval.character = letter;
-                        return CHAR;
-                        }
+int main(){
+	yyparse();
+	return 0;
+}
 
-{number}		{yylval.integer = strtol(yytext, NULL, 10);
-			return INT;
-			}
-
-{word}			{char * text = malloc(strlen(yytext)+1);
-			strcpy(text,yytext);
-			yylval.string = text;
-			return ID;
-			}
-
-\".*\"			{char *text = malloc(strlen(yytext)+1);
-			strcpy(text, yytext);
-			yyval.string = text;
-			return STRING;
-			}
-
-
-%%
-int yywrap(void){
-	return 1;
+void yyerror(char * s){
+	fprintf(stderr, "%s\n", s);
+	return;
 }

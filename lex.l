@@ -6,7 +6,6 @@
 	int yylex();
 	
 
-//"for"                   {return FOR;} FALTA VER DE AGREGAR ESTO
 %}
 
 %option 
@@ -20,7 +19,7 @@ space			{void}+
 
 
 %%
---.*--			;/* comments are ignored */
+"--"(.|\n)*"--"	;/* comments are ignored */
 {space}			;/* does nothing */
 "main"			{return MAIN;}
 "else"			{return ELSE;}
@@ -66,12 +65,23 @@ space			{void}+
 "var"			{return T_CHAR;}
 "end"			{return END;}
 
-'({letter}|{digit})'		{yylval.character = yytext[1];
+\".*\"                  {char *text = malloc(strlen(yytext)+1);
+                        strcpy(text, yytext);
+                        yylval.string = text;
+                        return STRING;
+                        }
+
+
+'({letter}|{digit})'	{char * text = malloc(strlen(yytext)+1);
+			strcpy(text, yytext);
+			yylval.string = text;
 			return CHAR;
 			}
 
 
-{number}		{yylval.integer = strtol(yytext, NULL, 10);
+{number}		{char * text = malloc(strlen(yytext)+1);
+			strcpy(text, yytext);
+			yylval.string = text;
 			return INT;
 			}
 
@@ -81,11 +91,6 @@ space			{void}+
 			return ID;
 			}
 
-\".*\"			{char *text = malloc(strlen(yytext)+1);
-			strcpy(text, yytext);
-			yylval.string = text;
-			return STRING;
-			}
 
 
 %%

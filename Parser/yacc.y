@@ -3,7 +3,7 @@
 	#include <stdlib.h>
 	#include <ctype.h>
 	#include <string.h>
-	#include "node.h"
+	#include "../node.h"
 
 	int yylex();
 	void yyerror(char * s);

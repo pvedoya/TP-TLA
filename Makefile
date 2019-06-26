@@ -1,12 +1,11 @@
 all:
-	yacc -d yacc.y
-	lex lex.l
-	gcc -o parser y.tab.c lex.yy.c node.c
-
-clean:
-	rm parser lex.yy.c y.tab.c y.tab.h
-
-
-cleanall:
-	rm parser lex.yy.c y.tab.c y.tab.h ccode.c
+	cd ./Parser; make all; cd ..
 	
+clean:
+	cd ./Parser; make clean; cd ..
+
+cleanall: 
+	rm ccode.c 
+	cd ./Parser; make clean; cd ..
+
+customExamples:

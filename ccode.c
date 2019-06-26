@@ -1,4 +1,8 @@
-int main ( ) {
+int go = 2 ;
+ char * ber = "fadf" ;
+ int main ( ) {
+ printf ( "VARIABLES GLOBALES, 1:%d, 2:%s\n" , go , ber ) ;
+ char caracter = 'f' ;
  int hola = 23 ;
  hola += 3 ;
  hola -= 4 ;

@@ -1,4 +1,11 @@
+num go = 2.
+str ber = "fadf".
+
 num main(){
+	printf("VARIABLES GLOBALES, 1:%d, 2:%s\n", go, ber).
+
+	var caracter = #f#.
+
 	num hola = 23.
         hola +=3.
         hola -=4.

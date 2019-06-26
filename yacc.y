@@ -27,7 +27,7 @@
        OPEN_CURLY_PARENTHESES CLOSE_CURLY_PARENTHESES OPEN_PARENTHESES CLOSE_PARENTHESES OPEN_BRACKETS CLOSE_BRACKETS CONSTANT
        T_CHAR T_INT T_STRING END
 
-%type <node> program sentence main function type arguments arg var code lines line declare assign assval value call_function call_arguments return when else during condition expression compare
+%type <node> program sentence global main function type arguments arg var code lines line declare assign assval value call_function call_arguments return when else during condition expression compare
 
 /*Precedence of actions, the least important come first.*/
 
@@ -38,18 +38,27 @@
 
 %%
 
-program		:	sentence														{	$$ = $1;
+program		:	 sentence														{	$$ = $1;
 																		 	printTree($$);
 																		}
 	 	;
 sentence	:	sentence function													{	$$ = newNode("sentence");
-	 																		append($$, $1);
-																			append($$ ,$2);
+	 																		append($$, $1);			
+	 																		append($$, $2);
 																		}
-	 	|	main															{	$$ = newNode("sentence");
+	 	|	global															{	$$ = newNode("sentence");
 																			append($$, $1);
 																		}
 		;
+global		:	declare DOT global													{	$$ = newNode("global");
+																			append($$, $1);
+																			append($$, newNodeWithType(NULL, dotN));
+																			append($$, $3);
+																		}
+		|	main															{	$$ = newNode("global");
+																			append($$, $1);
+																		}
+		;																
 main		:	T_INT MAIN OPEN_PARENTHESES CLOSE_PARENTHESES OPEN_CURLY_PARENTHESES code CLOSE_CURLY_PARENTHESES 			{	$$ = newNode("main");
       																			append($$, newNodeWithType(NULL, tintN));
       																			append($$, newNodeWithType(NULL, mainN));
@@ -173,7 +182,7 @@ declare		:	T_INT ID ASSIGN value													{	$$ = newNode("declare");
 																			append($$, newNodeWithType(NULL, tcharN));
 																			append($$, newNodeWithType($2, idN));
                                                                                                                                                         append($$, newNodeWithType(NULL, assignN));
-                                                                                                                                                        append($$, newNodeWithType($4, charN));
+																			append($$, newNodeWithType($4, charN));
 																		}	
 		|	T_CHAR ID ASSIGN call_function    											{	$$ = newNode("declare");
 																			append($$, newNodeWithType(NULL, tcharN));

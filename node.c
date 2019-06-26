@@ -99,7 +99,7 @@ void printTree(Node * node){
 		return;
 	}
 	if(node->token != middleN){
-		if(node->token != intN && node->token != stringN && node->token != idN) {
+		if(node->token != intN && node->token != stringN && node->token != idN && node->token != charN) {
      	 		node->value = tokens[node->token];
     		}
 		if(node->value == NULL){

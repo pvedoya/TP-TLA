@@ -5,7 +5,7 @@
 	void yyerror(char * s);
 	int yylex();
 	
-
+//FALTA IMPLEMENTAR CHAR
 %}
 
 %option 
@@ -65,18 +65,23 @@ space			{void}+
 "var"			{return T_CHAR;}
 "end"			{return END;}
 
+
+#{letter}#              {char * text = malloc(strlen(yytext)+1);
+			strcat(text, "'");
+                        strcat(text, " ");
+                    	strcat(text, "'");
+                        text[1] = yytext[1];
+			text[3] = 0;
+                        yylval.string = text;
+                        return CHAR;
+                        }
+
+
 \".*\"                  {char *text = malloc(strlen(yytext)+1);
                         strcpy(text, yytext);
                         yylval.string = text;
                         return STRING;
                         }
-
-
-'({letter}|{digit})'	{char * text = malloc(strlen(yytext)+1);
-			strcpy(text, yytext);
-			yylval.string = text;
-			return CHAR;
-			}
 
 
 {number}		{char * text = malloc(strlen(yytext)+1);

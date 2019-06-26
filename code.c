@@ -1,10 +1,19 @@
-num go = 2.
+num go = -2.
 str ber = "fadf".
 
 num main(){
+	dec decimal = 3.2.
+	dec deccimal = -323.2123.
+	printf("%g  %g\n", decimal, deccimal).
+
+
+
 	printf("VARIABLES GLOBALES, 1:%d, 2:%s\n", go, ber).
 
-	var caracter = #f#.
+	var caracter = 'f'.
+	var number = '0'.
+
+	printf("numero: %c caracter: %c\n",number,caracter).
 
 	num hola = 23.
         hola +=3.

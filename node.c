@@ -95,15 +95,15 @@ Node * nthChild(Node * node, int n){
 
 void printTree(Node * node){
 	if(node == NULL){
-		printf("ERROR \n");
+		printf("ERROR 1\n");
 		return;
 	}
 	if(node->token != middleN){
-		if(node->token != intN && node->token != stringN && node->token != idN && node->token != charN) {
+		if(node->token != intN && node->token != stringN && node->token != idN && node->token != charN && node->token != decimalN) {
      	 		node->value = tokens[node->token];
     		}
 		if(node->value == NULL){
-      			printf( "ERROR \n");
+      			printf( "ERROR 2\n");
      			 return;
     		}
 
@@ -116,7 +116,7 @@ void printTree(Node * node){
   	if(node->token == middleN){
 
     		if(node->children == NULL){
-      			printf("ERROR\n");
+      			printf("ERROR 3\n");
       			return;
     		}
 
@@ -127,6 +127,10 @@ void printTree(Node * node){
       			aux = aux->next;
     		}
   	}
+}
+
+void printHeaders(){
+	printf("#include <stdio.h>\n\n");
 }
 
 int total(Node * root){

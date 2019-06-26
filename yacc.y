@@ -20,12 +20,12 @@
 
 /*Definition of tokens, they use the token names defined in the lex.l file*/
 
-%token <string> ID STRING INT CHAR
+%token <string> ID STRING INT CHAR DECIMAL
 
 %token MAIN ELSE RETURN WHEN DURING REPEAT DOT PRINTF READ ASSIGN SUM_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN OP_ASSIGN MOD_ASSIGN
        LEQ_THAN GEQ_THAN EQUAL NOT_EQUAL LESS_THAN GREATER_THAN AND OR NOT SUM SUB MULT DIV MOD COLON SEMICOLON COMMA 
        OPEN_CURLY_PARENTHESES CLOSE_CURLY_PARENTHESES OPEN_PARENTHESES CLOSE_PARENTHESES OPEN_BRACKETS CLOSE_BRACKETS CONSTANT
-       T_CHAR T_INT T_STRING END
+       T_CHAR T_INT T_STRING T_DECIMAL END
 
 %type <node> program sentence global main function type arguments arg var code lines line declare assign assval value call_function call_arguments return when else during condition expression compare
 
@@ -39,6 +39,7 @@
 %%
 
 program		:	 sentence														{	$$ = $1;
+	 																		printHeaders();
 																		 	printTree($$);
 																		}
 	 	;
@@ -85,6 +86,8 @@ type		:	T_INT															{	$$ = newNodeWithType(NULL, tintN);
       		|	T_STRING														{	$$ = newNodeWithType(NULL,tstringN);
 																		}
 		|	T_CHAR															{	$$ = newNodeWithType(NULL, tcharN);
+																		}
+		|	T_DECIMAL														{	$$ = newNodeWithType(NULL, tdecimalN);
 																		}
 		;
 arguments	:																{	$$ = NULL;
@@ -160,6 +163,12 @@ declare		:	T_INT ID ASSIGN value													{	$$ = newNode("declare");
 																			append($$, newNodeWithType(NULL, assignN));
 																			append($$, newNodeWithType($4, idN));
 																		}
+		|	T_DECIMAL ID ASSIGN value												{	$$ = newNode("declare");
+																			append($$, newNodeWithType(NULL, tdecimalN));
+																			append($$, newNodeWithType($2, idN));
+																			append($$, newNodeWithType(NULL, assignN));
+																			append($$, $4);
+																		}
 	 	|	T_STRING ID ASSIGN STRING												{	$$ = newNode("declare");
 																			append($$, newNodeWithType(NULL, tstringN));
 																			append($$, newNodeWithType($2, idN));
@@ -232,6 +241,8 @@ value		:	ID															{	$$ = newNodeWithType($1, idN);
        																		}
        		|	INT															{	$$ = newNodeWithType($1, intN);
 																		}
+		|	DECIMAL															{	$$ = newNodeWithType($1, decimalN);
+																		}	
 		|	call_function														{	$$ = newNode("value");
 																			append($$, $1);
 																		}

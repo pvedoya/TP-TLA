@@ -10,16 +10,16 @@
 
 %option 
 digit			[0-9]
-number			[0-9]+
+number			-?[0-9]+
 letter			[a-zA-Z]
-/*decimal			-?{digit}+(\.{digit}+)?*/
+decimal			-?{digit}+(\.{digit}+)
 word			[a-zA-Z][a-zA-Z0-9_]*
 void			[ \t\n]
 space			{void}+
 
 
 %%
-"--"(.|\n)*"--"	;/* comments are ignored */
+"--"(.|\n)*"--"		;/* comments are ignored */
 {space}			;/* does nothing */
 "main"			{return MAIN;}
 "else"			{return ELSE;}
@@ -63,10 +63,11 @@ space			{void}+
 "num"			{return T_INT;}
 "str"			{return T_STRING;} 
 "var"			{return T_CHAR;}
+"dec"			{return T_DECIMAL;}
 "end"			{return END;}
 
 
-#{letter}#              {char * text = malloc(strlen(yytext)+1);
+'({letter}|{digit})'    {char * text = malloc(strlen(yytext)+1);
 			strcat(text, "'");
                         strcat(text, " ");
                     	strcat(text, "'");
@@ -81,6 +82,12 @@ space			{void}+
                         strcpy(text, yytext);
                         yylval.string = text;
                         return STRING;
+                        }
+
+{decimal}               {char * text = malloc(strlen(yytext)+1);
+                        strcpy(text, yytext);
+                        yylval.string = text;
+                        return DECIMAL;
                         }
 
 

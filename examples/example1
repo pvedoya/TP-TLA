@@ -1,5 +1,4 @@
-/* This code shows how the various assignments and operations work*/
-
+<-- This code shows how the various assignments and operations work -->
 
 num sum(num number1, num number2).
 num sub(num number1, num number2).

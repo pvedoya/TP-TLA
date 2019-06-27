@@ -413,10 +413,13 @@ expression	:	call_function														{	$$ = newNode("expression");
 																		}
 		|	ID															{	$$ = newNodeWithValue($1, idN);
 																		}
-		|	value compare value													{	$$ = newNode("expressopn");
+		|	value compare value													{	$$ = newNode("expression");
 																			append($$,$1);
 																			append($$,$2);
 																			append($$,$3);
+																		}
+		|	value															{	$$ = newNode("expression");
+																			append($$, $1);
 																		}
 		;
 compare		:	EQUAL															{	$$ = newNodeWithValue(NULL, equalN);

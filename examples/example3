@@ -1,6 +1,7 @@
-/*This program shows how logical operators and if and while statements work*/
+<-- This program shows how logical operators and if and while statements work -->
 
-
+num trueValue().
+num falseValue().
 
 num main(){
 	printf("We will use four num variables, two of them 0 and 1 (representing true and false), the other will be user input\n").
@@ -45,6 +46,36 @@ num main(){
         during(c <> '\n').
 
 	
-        printf("Your numbers: %d and %d", num1, num2).
+        printf("Your numbers: %d and %d\n", num1, num2).
 
+	 
+	when(((true & 0) & (false & 1))){
+                printf("Will not enter here\n").
+	} else when((( true | false) | (false & true))){
+		printf("Will enter here\n").
+	}
+
+	when(num1 > num2){
+		printf("%d is greater than %d\n", num1, num2).
+	}else when (num1 < num2){
+		printf("%d is greater than %d\n", num2, num1).
+	}else{
+		printf("They are equal\n").
+	}
+
+	when(falseValue()){
+		printf("Will not enter here\n").
+	}else when(trueValue()){
+		printf("Will enter here\n").
+	}
+
+
+}
+
+num trueValue(){
+	return 1.
+}
+
+num falseValue(){
+	return 2.
 }

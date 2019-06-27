@@ -19,7 +19,7 @@ space			{void}+
 
 
 %%
-"/*"([^/*]|\n)*"*/"	;/* comments are ignored */
+"<--".*"-->"		;/* comments are ignored */
 {space}			;/* does nothing */
 "main"			{return MAIN;}
 "else"			{return ELSE;}

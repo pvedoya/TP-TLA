@@ -1,20 +1,21 @@
-/*This program is designed to show how to insert comments in the program*/
+<-- This program is designed to show how to insert comments in the program -->
+
 
 str giveString().
 
 num main(){
 	str message = "It also shows how the string variables work".
-	/*Ignore this comment*/
+
+	<-- This is a comment -->
+	
 	str add = giveString().
 
-	/*This is another comment
-		You can also add two lines of comments if they don't contain code
-			Even three or more*/
 	printf("Strings: %s -- %s\n", message, add).
 
 }
 
 str giveString(){
+
+	<-- You can comment anywhere you like, as long as it is one line long -->
 	return "I am being returned".
-	
 }

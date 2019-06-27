@@ -1,4 +1,4 @@
-# SIMPLE
+# eaC
 
 1) Build
 To build the Parser, use the Makefile included. To do so, run the following command in the terminal, standing in the project's main directory:

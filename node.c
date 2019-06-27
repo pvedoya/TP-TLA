@@ -131,7 +131,6 @@ void printTree(Node * node){
 
 void printHeaders(){
 	printf("#include <stdio.h>\n");
-	printf("#include <string.h>\n");
 	printf("#include <stdlib.h>\n");
 }
 

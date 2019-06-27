@@ -18,7 +18,7 @@
 	char * string;
 }
 
-/*Definition of tokens, they use the token names defined in the lex.l file*/
+/*Definition of tokens, they use the token names defined in the lex.l file, the non terminal tokens are saved as nodes*/
 
 %token <string> ID STRING INT CHAR DECIMAL
 

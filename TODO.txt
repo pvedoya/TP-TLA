@@ -1,0 +1,5 @@
+1. Comentar todo
+2. Hacer los ejemplos
+3. Hacer el informe
+4. Emprolijar todo
+5. Agregar mas cosas al programa

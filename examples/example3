@@ -1,0 +1,50 @@
+/*This program shows how logical operators and if and while statements work*/
+
+
+
+num main(){
+	printf("We will use four num variables, two of them 0 and 1 (representing true and false), the other will be user input\n").
+
+        num true = 1.
+        num false = 0.
+
+        num num1 = 0.
+        num num2 = 0.
+
+	num aux = 0.
+
+	printf("Enter first number: (default is 0)\n").
+
+	var c = read().
+
+        during(c <> '\n'){
+                when((c > '9' | c < '0')){
+                        printf("You must input a number!").
+                        end.
+                }
+		aux = c - '0'.
+                num1 = num1 * 10 + aux.
+		c = read().
+
+        }
+
+
+        printf("Enter second number: (defaukt is 0)\n").
+		
+	c = read().
+	
+        repeat{ 
+		when((c > '9' | c < '0')){
+                        printf("You must input a number!").
+                        end.
+                }
+                aux = c - '0'.
+                num2 = num2 * 10 + aux.
+		c = read().
+	}
+        during(c <> '\n').
+
+	
+        printf("Your numbers: %d and %d", num1, num2).
+
+}

@@ -19,7 +19,7 @@ space			{void}+
 
 
 %%
-"--"(.|\n)*"--"		;/* comments are ignored */
+"/*"([^/*]|\n)*"*/"	;/* comments are ignored */
 {space}			;/* does nothing */
 "main"			{return MAIN;}
 "else"			{return ELSE;}
@@ -64,10 +64,21 @@ space			{void}+
 "str"			{return T_STRING;} 
 "var"			{return T_CHAR;}
 "dec"			{return T_DECIMAL;}
+"nul"			{return T_VOID;}
 "end"			{return END;}
 
+'\\n'			{char * text = malloc(strlen(yytext)+1);
+                        strcat(text, "'");
+                        strcat(text, "  ");
+                        strcat(text, "'");
+                        text[1] = yytext[1];
+			text[2] = yytext[2];
+                        text[4] = 0;
+                        yylval.string = text;
+                        return CHAR;
+                        }
 
-'({letter}|{digit})'    {char * text = malloc(strlen(yytext)+1);
+'.' 			{char * text = malloc(strlen(yytext)+1);
 			strcat(text, "'");
                         strcat(text, " ");
                     	strcat(text, "'");

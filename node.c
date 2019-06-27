@@ -4,7 +4,7 @@
 #include "node.h"
 
 
-Node * newNodeWithType(char * value, token token){
+Node * newNodeWithValue(char * value, token token){
         Node * node = (Node *) malloc(sizeof(Node));
 
 	if(node == NULL){
@@ -23,7 +23,7 @@ Node * newNodeWithType(char * value, token token){
 }
 
 Node * newNode(char * value){
-        Node * node = newNodeWithType(value, middleN);
+        Node * node = newNodeWithValue(value, middleN);
         return node;
 }
 
@@ -130,7 +130,9 @@ void printTree(Node * node){
 }
 
 void printHeaders(){
-	printf("#include <stdio.h>\n\n");
+	printf("#include <stdio.h>\n");
+	printf("#include <string.h>\n");
+	printf("#include <stdlib.h>\n");
 }
 
 int total(Node * root){

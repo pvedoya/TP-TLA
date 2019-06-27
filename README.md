@@ -8,8 +8,8 @@ $> make
 This will generate the parser inside the "Parser" folder.
 
 2) Compile
-The compiler will turn your .sim file into a .c file, and create the executable with a name you choose.
-Make sure to have your .sim file in the main directory, and run the compile.sh executable, with your .sim file as first parameter and the desired name for your program as second parameter.
+The compiler will turn your file into a .c file, and create the executable with a name you choose.
+Make sure to have your desired file in the main directory, and run the compile.sh executable, with your file as first parameter and the desired name for your program as second parameter.
 This will create a ccode.c file with your code in c, and will compile this file to create the executable.
 From here you can execute the program using "./programName", where programName is the second parameter when you run compile.sh.
 

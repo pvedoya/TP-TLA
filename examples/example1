@@ -1,0 +1,95 @@
+/* This code shows how the various assignments and operations work*/
+
+
+num sum(num number1, num number2).
+num sub(num number1, num number2).
+num mult(num number1, num number2).
+num division(num number1, num number2).
+nul assignExamples().
+
+num main(){
+
+        printf("Please enter a single digit number:\n").
+        var number = read().
+
+        during((number > '9' | number < '0')){
+                number = read().
+        }
+
+        var c = read().
+        during( c <> '\n'){
+                c= read().
+        }
+
+        num n1 = number - '0'.
+
+        printf("Please enter a second single digit number:\n").
+        var number2 = read().
+
+        during((number2 > '9' | number2 < '0')){
+                number2 = read().
+        }
+
+        c = read().
+        during( c <> '\n'){
+                c= read().
+        }
+
+        num n2 = number2 - '0'.
+
+        printf("Your numbers: n1 = %d n2 = %d\n", n1, n2).
+
+        printf("Their sum is: %d\n", sum(n1, n2)).
+        printf("Their substraction is: %d\n", sub(n1, n2)).
+        printf("Their multiplication is: %d\n", mult(n1,n2)).
+        printf("Their division (cast to int) is: %d\n", division(n1, n2)).
+
+        assignExamples().
+
+}
+
+nul assignExamples(){
+        printf("Now the program will demonstrate how values are assigned using +=, -=, *=, /=, != and %=, using the values 13 and -3\n").
+
+        num aux = -3.
+        aux += 13.
+        printf(" -3 (variable value) += 13 => %d\n", aux).
+
+        aux = 13.
+        aux -= -3.
+        printf(" 13 (variable value) -= -3 => %d\n", aux).
+
+        aux = 13.
+        aux *= -3.
+        printf(" 13 (variable value) *= -3 => %d\n", aux).
+
+        aux = 13.
+        aux %= -3.
+        printf(" 13 (variable value) %= -3 => %d\n", aux).
+
+        aux = -3.
+        aux != 13.
+        printf(" -3 (variable value) != 13 => %d (this will change the value of the assigned variable to -13)\n", aux). 
+}
+
+num division(num number1, num number2){
+        when(number2 == 0){
+                printf("Can't divide by 0").
+                end.
+        }
+        return number1 / number2.
+}
+
+num sum(num number1, num number2){
+        return number1 + number2.
+}
+
+num sub(num number1, num number2){
+        return number1 - number2.
+}
+
+num mult(num number1, num number2){
+        return number1 * number2.
+}
+
+

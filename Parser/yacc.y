@@ -25,7 +25,7 @@
 %token MAIN ELSE RETURN WHEN DURING REPEAT DOT PRINTF READ ASSIGN SUM_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN OP_ASSIGN MOD_ASSIGN
        LEQ_THAN GEQ_THAN EQUAL NOT_EQUAL LESS_THAN GREATER_THAN AND OR NOT SUM SUB MULT DIV MOD COLON SEMICOLON COMMA
        OPEN_CURLY_PARENTHESES CLOSE_CURLY_PARENTHESES OPEN_PARENTHESES CLOSE_PARENTHESES OPEN_BRACKETS CLOSE_BRACKETS CONSTANT
-       T_CHAR T_INT T_STRING T_DECIMAL T_VOID END
+       T_CHAR T_INT T_STRING T_DECIMAL T_VOID CONSTANT END
 
 %type <node> program sentence global main function type arguments arg var code lines line declare assign assval value call_function call_arguments return when else during condition expression compare
 
@@ -161,7 +161,22 @@ declare		:	type ID															{	$$ = newNode("declare");
 																			append($$, $1);
 																			append($$, newNodeWithValue($2, idN));
 																		}
- 		|	T_INT ID ASSIGN value													{	$$ = newNode("declare");
+ 		| 	type CONSTANT ID ASSIGN value												{	$$ = newNode("declare");
+																			append($$, $1);
+                                                                                                                                                        append($$, newNodeWithValue(NULL, constantN));
+                                                                                                                                                        append($$, newNodeWithValue($3, idN));
+                                                                                                                                                        append($$, newNodeWithValue(NULL, assignN));
+                                                                                                                                                        append($$, $5);
+
+																		}
+		|	type CONSTANT ID ASSIGN STRING												{	$$ = newNode("declare");
+                                                                                                                                                        append($$, $1);
+                                                                                                                                                        append($$, newNodeWithValue(NULL, constantN));
+                                                                                                                                                        append($$, newNodeWithValue($3, idN));
+                                                                                                                                                        append($$, newNodeWithValue(NULL, assignN));
+                                                                                                                                                        append($$, newNodeWithValue($5,stringN));
+																		}
+		|	T_INT ID ASSIGN value													{	$$ = newNode("declare");
 																			append($$, newNodeWithValue(NULL, tintN));
 																			append($$, newNodeWithValue($2, idN));
 																			append($$, newNodeWithValue(NULL, assignN));

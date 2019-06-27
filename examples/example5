@@ -3,6 +3,8 @@
 num power(num a, num b).
 
 num main(){
+
+
 	printf("The answer to 3^4 is %d\n", power(3,4)).
 
 }

@@ -1,5 +1,17 @@
 1. Comentar todo
-2. Hacer los ejemplos
 3. Hacer el informe
-4. Emprolijar todo
-5. Agregar mas cosas al programa
+
+
+
+
+
+
+
+
+debilidades:
+>no funciona declarar variable sin asignar valor
+>no fuincionan variables globales
+>no puedo leer todo un valor por stdin
+>no es muy comodo las sentencias de when
+>no puede guardar vectores que seria bastante clave
+>no puedo tener comentarios de mas de una linea SOLUCIONENLO

@@ -66,6 +66,7 @@ space			{void}+
 "dec"			{return T_DECIMAL;}
 "nul"			{return T_VOID;}
 "end"			{return END;}
+"fix"			{return CONSTANT;}
 
 '\\n'			{char * text = malloc(strlen(yytext)+1);
                         strcat(text, "'");

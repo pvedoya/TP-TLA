@@ -8,13 +8,13 @@ typedef enum tokens{
         mainN, elseN, returnN, whenN, duringN, repeatN, dotN, printfN, readN, assignN, sumAssignN,
         subAssignN, mulAssignN, divAssignN, opAssignN, modAssignN, leqN, geqN, equalN, notEqualN, lessN, greaterN,
         andN, orN, notN, sumN, subN, multN, divN, modN, colonN, semicolonN, commaN, opCurlyN, clCurlyN,
-        opParenthesesN, clParenthesesN, opBracketsN, clBracketsN, tintN, tstringN, tcharN, tdecimalN, tvoidN, intN, stringN, charN, idN, decimalN, endN,
+        opParenthesesN, clParenthesesN, opBracketsN, clBracketsN, tintN, tstringN, tcharN, tdecimalN, tvoidN, intN, stringN, charN, idN, decimalN, constantN, endN,
 
         rootN, middleN
 } token;
 
 static char * tokens[100] = {"main", "else", "return", "if", "while", "do",";\n", "printf", "getchar", "=", "+=", "-=", "*=", "/=", "=(-1)*","%=","<=",">=","==","!=","<",">","&&","||","!=",
-                                "+","-","*","/","%",":",";",",","{\n","}\n","(",")","[","]","int","char *","char", "float", "void", "", "", "", "", "","exit(0)","rootN","middleN"};
+                                "+","-","*","/","%",":",";",",","{\n","}\n","(",")","[","]","int","char *","char", "float", "void", "", "", "", "", "", "const","exit(0)","rootN","middleN"};
 
 
 //Implementation based on Chu0kupai n-ary node implementation from github

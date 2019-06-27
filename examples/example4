@@ -3,7 +3,8 @@
 num fibonacci(num n).
 
 num main(){
-	printf("For 9, answer is: %d\n", fibonacci(9)).
+	num fix n = 9.
+	printf("For 9, answer is: %d\n", fibonacci(n)).
 
 }
 

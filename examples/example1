@@ -4,6 +4,7 @@ num sum(num number1, num number2).
 num sub(num number1, num number2).
 num mult(num number1, num number2).
 num division(num number1, num number2).
+num module(num numbwe1, num number2).
 nul assignExamples().
 
 num main(){
@@ -42,6 +43,7 @@ num main(){
         printf("Their substraction is: %d\n", sub(n1, n2)).
         printf("Their multiplication is: %d\n", mult(n1,n2)).
         printf("Their division (cast to int) is: %d\n", division(n1, n2)).
+	printf("Their module is: %d\n", module(n1,n2)).
 
         assignExamples().
 
@@ -69,6 +71,10 @@ nul assignExamples(){
         aux = -3.
         aux != 13.
         printf(" -3 (variable value) != 13 => %d (this will change the value of the assigned variable to -13)\n", aux). 
+}
+
+num module(num number1, num number2){
+	return number1 % number2.
 }
 
 num division(num number1, num number2){

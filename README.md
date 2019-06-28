@@ -33,5 +33,5 @@ This will compile the examples code from the folder and create 5 executables in 
 
 > Pedro Remigio Pingarilho
 > Miguel Di Luca
-> Facundo Astiz Mayer
+> Facundo Astiz Meyer
 > Pedro Vedoya

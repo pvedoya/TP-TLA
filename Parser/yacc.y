@@ -236,9 +236,9 @@ assign		:	ID assval value														{	$$ = newNode("assign");
 																			append($$, $2);
 																			append($$, $3);
 																		}
-		|	ID assval STRING													{	$$ = newNode("assign");
+		|	ID ASSIGN STRING													{	$$ = newNode("assign");
 																			append($$, newNodeWithValue($1, idN));
-                                                                                                                                                        append($$, $2);
+                                                                                                                                                        append($$, newNodeWithValue(NULL, assignN));
                                                                                                                                                         append($$, newNodeWithValue($3, stringN));
 																		}
 		|	ID assval CHAR														{	$$ = newNode("assign");

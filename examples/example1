@@ -1,4 +1,5 @@
-<-- This code shows how the various assignments and operations work -->
+<-- This code shows how the various assignments an
+d operations work -->
 
 num sum(num number1, num number2).
 num sub(num number1, num number2).
@@ -70,7 +71,7 @@ nul assignExamples(){
 
         aux = -3.
         aux != 13.
-        printf(" -3 (variable value) != 13 => %d (this will change the value of the assigned variable to -13)\n", aux). 
+        printf(" -3 (variable value) != 13 => %d (this will change the value of the assigned variable to -13)\n", aux).
 }
 
 num module(num number1, num number2){
@@ -96,5 +97,3 @@ num sub(num number1, num number2){
 num mult(num number1, num number2){
         return number1 * number2.
 }
-
-

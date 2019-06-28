@@ -4,11 +4,12 @@
 	#include "y.tab.h"
 	void yyerror(char * s);
 	int yylex();
-	
+
+	int line_num = 1;
 //FALTA IMPLEMENTAR CHAR
 %}
 
-%option 
+%option
 digit			[0-9]
 number			-?[0-9]+
 letter			[a-zA-Z]
@@ -16,10 +17,15 @@ decimal			-?{digit}+(\.{digit}+)
 word			[a-zA-Z][a-zA-Z0-9_]*
 void			[ \t\n]
 space			{void}+
-
+%x comment
 
 %%
-"<--".*"-->"		;/* comments are ignored */
+"<--" BEGIN(comment);
+<comment>[^-\n]* 											/* eat anything that's not a '*' */
+<comment>"-"+[^*"->"\n]* 								/* eat up '*'s not followed by '/'s */
+<comment>\n ++line_num;
+<comment>"-"+"-"+">" BEGIN(INITIAL);
+
 {space}			;/* does nothing */
 "main"			{return MAIN;}
 "else"			{return ELSE;}
@@ -61,7 +67,7 @@ space			{void}+
 "["			{return OPEN_BRACKETS;}
 "]"			{return CLOSE_BRACKETS;}
 "num"			{return T_INT;}
-"str"			{return T_STRING;} 
+"str"			{return T_STRING;}
 "var"			{return T_CHAR;}
 "dec"			{return T_DECIMAL;}
 "nul"			{return T_VOID;}

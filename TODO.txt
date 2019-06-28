@@ -7,5 +7,4 @@ debilidades:
 >no puedo leer todo un valor por stdin
 >no es muy comodo las sentencias de when
 >no puede guardar vectores que seria bastante clave
->no puedo tener comentarios de mas de una linea SOLUCIONENLO
 >NOSE PORQUE NO PUEDO HACER SUMAS RESTAS LO QUE SEA SI LOS PARAMETROS ESTAN PEGADOS LPM

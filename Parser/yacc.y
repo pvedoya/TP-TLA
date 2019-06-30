@@ -188,6 +188,10 @@ declare	: type ID {
         append($$, newNodeWithValue($3, idN));
         append($$, newNodeWithValue(NULL, assignN));
         append($$, newNodeWithValue($5,stringN));
+} |	T_INT ID {
+		$$ = newNode("declare");
+		append($$, newNodeWithValue(NULL, tintN));
+		append($$, newNodeWithValue($2, idN));
 } |	T_INT ID ASSIGN value {
 		$$ = newNode("declare");
 		append($$, newNodeWithValue(NULL, tintN));
@@ -200,6 +204,10 @@ declare	: type ID {
 		append($$, newNodeWithValue($2, idN));
 		append($$, newNodeWithValue(NULL, assignN));
 		append($$, newNodeWithValue($4, idN));
+} |	T_DECIMAL ID {
+		$$ = newNode("declare");
+		append($$, newNodeWithValue(NULL, tdecimalN));
+		append($$, newNodeWithValue($2, idN));
 } |	T_DECIMAL ID ASSIGN value {
 		$$ = newNode("declare");
 		append($$, newNodeWithValue(NULL, tdecimalN));
@@ -212,6 +220,10 @@ declare	: type ID {
 		append($$, newNodeWithValue($2, idN));
 		append($$, newNodeWithValue(NULL, assignN));
 		append($$, newNodeWithValue($4, stringN));
+} |	T_STRING ID {
+		$$ = newNode("declare");
+		append($$, newNodeWithValue(NULL, tstringN));
+		append($$, newNodeWithValue($2, idN));
 } |	T_STRING ID ASSIGN call_function {
 		$$ = newNode("declare");
 		append($$, newNodeWithValue(NULL, tstringN));
@@ -222,26 +234,30 @@ declare	: type ID {
 		$$ = newNode("declare");
 		append($$, newNodeWithValue(NULL, tstringN));
 		append($$, newNodeWithValue($2, idN));
-        append($$, newNodeWithValue(NULL, assignN));
-        append($$, newNodeWithValue($4, idN));
+    append($$, newNodeWithValue(NULL, assignN));
+    append($$, newNodeWithValue($4, idN));
+} |	T_CHAR ID {
+		$$ = newNode("declare");
+		append($$, newNodeWithValue(NULL, tcharN));
+		append($$, newNodeWithValue($2, idN));
 } |	T_CHAR ID ASSIGN CHAR {
 		$$ = newNode("declare");
 		append($$, newNodeWithValue(NULL, tcharN));
 		append($$, newNodeWithValue($2, idN));
-        append($$, newNodeWithValue(NULL, assignN));
+    append($$, newNodeWithValue(NULL, assignN));
 		append($$, newNodeWithValue($4, charN));
 } |	T_CHAR ID ASSIGN call_function {
 		$$ = newNode("declare");
 		append($$, newNodeWithValue(NULL, tcharN));
 		append($$, newNodeWithValue($2,idN));
-        append($$, newNodeWithValue(NULL, assignN));
-        append($$, $4);
+    append($$, newNodeWithValue(NULL, assignN));
+    append($$, $4);
 } |	T_CHAR ID ASSIGN ID	{
 		$$ = newNode("declare");
 		append($$, newNodeWithValue(NULL, tcharN));
 		append($$, newNodeWithValue($2,idN));
-        append($$, newNodeWithValue(NULL, assignN));
-        append($$, newNodeWithValue($4, idN));
+    append($$, newNodeWithValue(NULL, assignN));
+    append($$, newNodeWithValue($4, idN));
 };
 
 assign : ID assval value {

@@ -6,7 +6,6 @@
 	int yylex();
 
 	int line_num = 1;
-//FALTA IMPLEMENTAR CHAR
 %}
 
 %option

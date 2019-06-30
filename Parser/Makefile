@@ -5,4 +5,3 @@ all:
 
 clean:
 	rm parser lex.yy.c y.tab.c y.tab.h
-

@@ -21,8 +21,8 @@ space			{void}+
 
 %%
 "<--" BEGIN(comment);
-<comment>[^-\n]* 											/* eat anything that's not a '*' */
-<comment>"-"+[^*"->"\n]* 								/* eat up '*'s not followed by '/'s */
+<comment>[^-\n]*
+<comment>"-"+[^*"->"\n]*
 <comment>\n ++line_num;
 <comment>"-"+"-"+">" BEGIN(INITIAL);
 

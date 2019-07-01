@@ -30,11 +30,12 @@ num main(){
         }
 
 
-        printf("Enter second number: (defaukt is 0)\n").
-		
+        printf("Enter second number: (default is 0)\n").
+
 	c = read().
-	
-        repeat{ 
+
+	when(c <> '\n'){
+        repeat{
 		when((c > '9' | c < '0')){
                         printf("You must input a number!").
                         end.
@@ -44,11 +45,11 @@ num main(){
 		c = read().
 	}
         during(c <> '\n').
+	}
 
-	
         printf("Your numbers: %d and %d\n", num1, num2).
 
-	 
+
 	when(((true & 0) & (false & 1))){
                 printf("Will not enter here\n").
 	} else when((( true | false) | (false & true))){

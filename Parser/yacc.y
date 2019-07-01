@@ -24,7 +24,7 @@
 
 %token MAIN ELSE RETURN WHEN DURING REPEAT DOT PRINTF READ ASSIGN SUM_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN OP_ASSIGN MOD_ASSIGN
        LEQ_THAN GEQ_THAN EQUAL NOT_EQUAL LESS_THAN GREATER_THAN AND OR NOT SUM SUB MULT DIV MOD COLON SEMICOLON COMMA
-       OPEN_CURLY_PARENTHESES CLOSE_CURLY_PARENTHESES OPEN_PARENTHESES CLOSE_PARENTHESES OPEN_BRACKETS CLOSE_BRACKETS CONSTANT
+       OPEN_CURLY_PARENTHESES CLOSE_CURLY_PARENTHESES OPEN_PARENTHESES CLOSE_PARENTHESES OPEN_BRACKETS CLOSE_BRACKETS
        T_CHAR T_INT T_STRING T_DECIMAL T_VOID CONSTANT END
 
 %type <node> program sentence global main function type arguments arg var code lines line declare assign assval value call_function call_arguments return when else during condition expression compare
@@ -268,14 +268,10 @@ assign : ID assval value {
 } |	ID ASSIGN STRING {
 		$$ = newNode("assign");
 		append($$, newNodeWithValue($1, idN));
-    	append($$, newNodeWithValue(NULL, assignN));
-        append($$, newNodeWithValue($3, stringN));
-} |	ID assval CHAR {
-		$$ = newNode("assign");
-		append($$, newNodeWithValue($1, idN));
-        append($$, $2);
-        append($$, newNodeWithValue($3, charN));
+    append($$, newNodeWithValue(NULL, assignN));
+    append($$, newNodeWithValue($3, stringN));
 };
+
 assval : ASSIGN	{
 		$$ = newNodeWithValue(NULL, assignN);
 } |	SUM_ASSIGN {
@@ -289,13 +285,13 @@ assval : ASSIGN	{
 } |	OP_ASSIGN	{
 		$$ = newNodeWithValue(NULL, opAssignN);
 } |	MOD_ASSIGN	{
-	$$ = newNodeWithValue(NULL, modAssignN);
+		$$ = newNodeWithValue(NULL, modAssignN);
 };
 
 value :	ID	{
 	$$ = newNodeWithValue($1, idN);
 } |	INT	{
-		$$ = newNodeWithValue($1, intN);
+	$$ = newNodeWithValue($1, intN);
 } |	DECIMAL	{
 	$$ = newNodeWithValue($1, decimalN);
 } |	CHAR {
@@ -310,23 +306,23 @@ value :	ID	{
 	append($$, $3);
 } |	value SUB value	{
 	$$ = newNode("value");
-    append($$, $1);
-    append($$, newNodeWithValue(NULL, subN));
-    append($$, $3);
+  append($$, $1);
+  append($$, newNodeWithValue(NULL, subN));
+  append($$, $3);
 } |	value MULT value {
 	$$ = newNode("value");
-    append($$, $1);
-    append($$, newNodeWithValue(NULL, multN));
-    append($$, $3);
+  append($$, $1);
+  append($$, newNodeWithValue(NULL, multN));
+  append($$, $3);
 } |	value DIV value {
 	$$ = newNode("value");
-    append($$, $1);
-    append($$, newNodeWithValue(NULL, divN));
-    append($$, $3);
+  append($$, $1);
+  append($$, newNodeWithValue(NULL, divN));
+  append($$, $3);
 } |	value MOD value	{
 	$$ = newNode("value");
-    append($$, $1);
-    append($$, newNodeWithValue(NULL, modN));
+  append($$, $1);
+  append($$, newNodeWithValue(NULL, modN));
 	append($$, $3);
 };
 
@@ -454,15 +450,8 @@ condition :	expression {
 		append($$, $2);
 };
 
-expression : call_function {
-		$$ = newNode("expression");
-		append($$, $1);
-} |	INT	{
-		$$ = newNodeWithValue($1, intN);
-} |	STRING {
+expression : STRING {
 		$$ = newNodeWithValue($1, stringN);
-} |	ID {
-		$$ = newNodeWithValue($1, idN);
 } |	value compare value	{
 	$$ = newNode("expression");
 	append($$,$1);

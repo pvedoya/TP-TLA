@@ -5,7 +5,7 @@ clean:
 	cd ./Parser; make clean; cd ..
 
 cleanall:
-	rm ccode.c
+	make cleanExamples
 	cd ./Parser; make clean; cd ..
 
 customExamples:
@@ -16,6 +16,7 @@ customExamples:
 	./compile.sh examples/example5 example5
 
 cleanExamples:
+	rm ccode.c
 	rm example1
 	rm example2
 	rm example3
